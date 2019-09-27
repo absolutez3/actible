@@ -21,8 +21,10 @@
       amc_username: "co@amc-6.do.fiuczynski.com"
       amc_password: "Akamai123!"
       amc_plc_name: "CoBlitz Test"
-      cachenode_hostname: "james1.lab.local"
+      cachenode_hostname: "absolute1.lab.local"
       license: "meow"
+      # DigitalOcean API token 
+      do_oath_token: "tokenhere"
   tasks:
       - name: Create site
         act_site:
@@ -49,7 +51,7 @@
                   if_name: eth0
                   IpAddresses:
                       - netmask: "16"
-                        address: "192.168.1.2"
+                        address: "192.168.1.3"
                         logical: 
                             - Client-Serving         
                   Routes:
@@ -61,11 +63,21 @@
             password: "{{ amc_password }}"
             hostname: "{{ amc_hostname }}"
             plc_name: "{{ amc_plc_name }}"
-            remote_hostname: "{{ amc_remote_hostname }}"
             state: present
             force: true
         register: cachenode
-
+      
+      - name: create a new droplet with 
+        digital_ocean_droplet:
+             state: present 
+             name: "{{ cachenode_hostname }}"
+             oauth_token: "{{ do_oath_token }} " 
+             size: 2gb
+             region: nyc1
+             image: centos-7-x64
+             unique_name: yes 
+             wait_timeout: 500
+             user_data: "{{ cachenode.setupscript }}" 
       - name: Save bootscript
         copy:
              content: "{{ cachenode.setupscript }}"
