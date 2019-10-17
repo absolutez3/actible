@@ -17,9 +17,9 @@
 ---
 - hosts: localhost
   vars:
-      amc_hostname: "amc-6.do.fiuczynski.com" 
-      amc_username: "co@amc-6.do.fiuczynski.com"
-      amc_password: "Akamai123!"
+      amc_hostname: "" 
+      amc_username: ""
+      amc_password: ""
       amc_plc_name: "CoBlitz Test"
       cachenode_hostname: "absolute1.lab.local"
       license: "meow"
